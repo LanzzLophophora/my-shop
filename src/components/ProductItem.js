@@ -1,18 +1,17 @@
-import React from "react";
+import React, { Component } from "react";
 
-class PostItem extends React.Component {
+class PostItem extends Component {
 
     addItemButton = () => {
         const { addToShoppingCart, post } = this.props;
         addToShoppingCart(post)
     };
 
-
     render() {
         const { cost, title, description } = this.props.post;
 
         return (
-            <div>
+            <div className={"item"}>
                 <h2>Название: {title}</h2>
                 <p>Описание товара: {description}</p>
                 <span>Цена: {cost} </span>
@@ -20,10 +19,5 @@ class PostItem extends React.Component {
             </div>
         )
     }
-
-// ( {
-//
-// }
-
 }
 export default PostItem;
