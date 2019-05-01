@@ -1,18 +1,19 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 
-class PostItem extends Component {
+class ProductItem extends Component {
 
     addItemButton = () => {
-        const { addToShoppingCart, post } = this.props;
-        addToShoppingCart(post)
+        const { addToShoppingCart, item } = this.props;
+        addToShoppingCart(item)
     };
 
     render() {
-        const { cost, title, description } = this.props.post;
+        const { cost, title, description, id, } = this.props.item;
 
         return (
             <div className={"item"}>
-                <h2>Название: {title}</h2>
+                <h2>Название: {<Link to={`/posts/${id}`} > {title} </Link>}</h2>
                 <p>Описание товара: {description}</p>
                 <span>Цена: {cost} </span>
                 <button onClick={this.addItemButton}>Add to shopping cart</button>
@@ -20,4 +21,4 @@ class PostItem extends Component {
         )
     }
 }
-export default PostItem;
+export default ProductItem;

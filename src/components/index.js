@@ -1,4 +1,8 @@
-import MyShop from "./MyShop";
+import Home from "./Home";
+import ProductList from "./ProductList";
+import Navbar from "./Navbar";
+import OneItem from "./OneItem"
 
 
-export default MyShop;
+
+export {Navbar, Home, ProductList, OneItem};

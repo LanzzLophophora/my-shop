@@ -1,12 +1,10 @@
-import React, { Component } from 'react';
-// import {Switch, Route} from 'react-router-dom';
-import { HashRouter, Switch, Route, Link, Redirect } from 'react-router-dom';
+import React, {Component} from 'react';
+import ProductList from "./ProductList";
+import {Route, Switch} from "react-router";
 import ShoppingCart from "./ShoppingCart";
-import Products from "./Products";
-// import App from '/App';
+import {OneItem} from "./index";
 
-
-class Main extends Component {
+class Home extends Component {
 
     state = {
         shoppingCart: [],
@@ -27,11 +25,20 @@ class Main extends Component {
                         return response.json();
                     }
                     throw new Error("Server error");
-                })//возвращать данные только тогда, когда код ответа меньше 300
+                })
                 .then(data => resolve(data))
-                .catch(error => reject(error.message)) // в ином случае throw new Error
+                .catch(error => reject(error.message))
         };
         return new Promise(requestHandler);
+    };
+
+    addToShoppingCart = item => {
+        const newShoppingCart = [...this.state.shoppingCart];
+        newShoppingCart.push(item);
+        this.setState({
+            shoppingCart: newShoppingCart
+        });
+        console.log("added!");
     };
 
     clearShoppingCart = () => {
@@ -48,62 +55,57 @@ class Main extends Component {
                         items
                     }
                 );
-                console.log("THRN");
             })
             .catch(error => this.setState({
                 error
             }));
     }
 
-    addToShoppingCart = item => {
-        console.log(item);
-
-        const newShoppingCart =  [ ...this.state.shoppingCart ];
-        newShoppingCart.push(item);
-        this.setState({
-            shoppingCart: newShoppingCart
-        });
-        console.log("added!");
-        // console.log(this.state.shoppingCart);
-    };
-
-
-
     render() {
-        const  { items, error, shoppingCart } = this.state;
+        const {items, error, shoppingCart} = this.state;
         return (
-            <main>
-                <ProductList />
+            <div>
+                <div className={"shoppingCart"}>
+                    В корзине сейчас {shoppingCart.length ? shoppingCart.length  : "нет" } предметов
+                    <button onClick={this.clearShoppingCart}>Clear Shoping Cart!</button>
+                </div>
 
-                {/*<Switch>*/}
-                    {/*<Route*/}
-                        {/*exact path='/'*/}
-                        {/*render={ () =>*/}
-                            {/*<Products*/}
-                                {/*items={items}*/}
-                                {/*error={error}*/}
-                            {/*/>*/}
-                        {/*}*/}
-                    {/*/>*/}
-                    {/*/!*<Route path='/roster' component={Roster}/>*!/*/}
-                    {/*/!*<Route path='/schedule' component={Schedule}/>*!/*/}
-                    {/*/!*<Route path="/products" component={Products}/>*!/*/}
-                    {/*/!*<Route path="/products/:id" component={Product} />*!/*/}
-                    {/*<Route*/}
-                        {/*path="/ShoppingCart"*/}
-                        {/*render={*/}
-                            {/*() =>*/}
-                                {/*<ShoppingCart*/}
-                                    {/*shoppingCart={shoppingCart}*/}
-                                {/*/>*/}
-                        {/*}*/}
-                    {/*/>*/}
-                    {/*<Redirect from="/" to="/products" />*/}
-                {/*</Switch>*/}
-            </main>
+                <Switch>
+                    <Route
+                        exact path="/posts"
+                        render={() => <ProductList
+                            items={items}
+                            error={error}
+                            handleAddItem={this.addToShoppingCart}
+                        />}
+                        // component={ Home }
+                    />
+
+                    <Route
+                        exact path="/cart"
+                        render={() => <ShoppingCart
+                            shoppingCart={ shoppingCart }
+                            handleAddItem={this.addToShoppingCart}
+                        />}
+                        // component={ ShoppingCart }
+                    />
+
+                    <Route
+                        exact path="/posts/:id"
+                        component={ OneItem }
+                    />
+
+                </Switch>
+
+                {/*<ProductList*/}
+                    {/*items={items}*/}
+                    {/*error={error}*/}
+                    {/*handleAddItem={this.addToShoppingCart}*/}
+                {/*/>*/}
+            </div>
         )
     }
 }
 
 
-export default Main;
+export default Home;
